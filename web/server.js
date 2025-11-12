@@ -7,6 +7,11 @@ const port = 3000;
 // Servir le frontend
 app.use(express.static('public'));
 
+// Route pour l'accueil après authentification
+app.get('/acceuil', (req, res) => {
+    res.sendFile(__dirname + '/public/acceuil.html');
+});
+
 // Connexion au broker MQTT
 const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
     username: 'Antho' 

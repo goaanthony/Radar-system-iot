@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Accueil - Radar MQTT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #f0f0f0;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #messages {
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: left;
+        }
+        .message {
+            padding: 8px;
+            margin: 5px 0;
+            background: #f9f9f9;
+            border-left: 3px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> Accueil - Radar MQTT</h1>
+        <p>Authentification réussie !</p>
+        <p id="status">Connexion au serveur MQTT...</p>
+        
+        <button onclick="logout()">Déconnexion</button>
+        
+        <div id="messages">
+            <p style="color: #999;">En attente de messages...</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const statusDiv = document.getElementById('status');
+        
+        const client = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
+            username: 'Antho'
+        });
+
+        client.on('connect', () => {
+            statusDiv.textContent = ' Connecté au broker MQTT';
+            console.log('Connecté via WebSocket');
+            client.subscribe('RadarB2Ynov');
+        });
+
+        client.on('message', (topic, message) => {
+            const messageText = message.toString();
+            console.log(`${topic}: ${messageText}`);
+            
+            const messageElement = document.createElement('div');
+            messageElement.className = 'message';
+            messageElement.textContent = ` ${topic}: ${messageText}`;
+            messagesDiv.insertBefore(messageElement, messagesDiv.firstChild);
+        });
+
+        client.on('error', (err) => {
+            statusDiv.textContent = ' Erreur de connexion MQTT';
+            console.error('Erreur:', err);
+        });
+
+        function logout() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
