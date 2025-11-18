@@ -103,8 +103,88 @@
         });
 
         function logout() {
-            window.location.href = '/';
+            window.location.href = '/web/public/index.html';
         }
     </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+        <script>
+            let a = 0;
+            let x= 450;
+            let y = 450;
+            let sens = 1;
+            let tailles = Math.random(450);
+            let longueur = 200;
+            let points = [];
+
+            function setup() {
+            createCanvas(900, 450);
+            }
+
+            function draw() {
+            background(0, 40);
+            noFill();
+            stroke(0, 255, 0);
+            strokeWeight(3);
+            circle(x, y, 800);
+            strokeWeight(1);
+            circle(x, y, 700);
+            strokeWeight(3);
+            circle(x, y, 600);
+            strokeWeight(1);
+            circle(x, y, 500);
+            strokeWeight(3);
+            circle(x, y, 400);
+            strokeWeight(1);
+            circle(x, y, 300);
+            strokeWeight(3);
+            circle(x, y, 200);
+            strokeWeight(1);
+            circle(x, y, 100);
+
+            longueur = tailles;
+            let x2 = x + cos(a) * longueur;
+            let y2 = y - sin(a) * longueur;
+
+            points.push({ x: x2, y: y2, alpha: 255 });
+
+            for (let i = 0; i < points.length; i++) {
+                stroke(0, 255, 0, points[i].alpha);
+                noFill();
+                circle(points[i].x, points[i].y, 10);
+
+                points[i].alpha -= 1;
+            }
+
+            points = points.filter(p => p.alpha > 0);
+            stroke(0, 255, 0);
+            strokeWeight(2);
+            line(450, 450, x2, y2);
+
+            a += 0.02 * sens;
+
+            if (a > PI) {
+                a = PI;
+                sens = -1;
+            }
+
+            if (a < 0) {
+                a = 0;
+                sens = 1;
+            }
+            fill(0, 255, 0);
+            noStroke();
+            textSize(10);
+            textAlign(CENTER, TOP);
+            text("0m", 450, 440);
+            text("0.5m", 387, 440);
+            text("1m", 340, 440);
+            text("1.5m", 287, 440);
+            text("2m", 240, 440);
+            text("2.5m", 187, 440);
+            text("3m", 140, 440);
+            text("3.5m", 87, 440);
+            text("4m", 40, 440);
+            }
+        </script>
 </body>
 </html>
